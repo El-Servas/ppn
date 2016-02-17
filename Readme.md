@@ -1,4 +1,4 @@
-# Corredor de Pruebas Masivas
+# Procesador de Pruebas
 
 Para el cálculo masivo del CAT Revolvente Con Amortización Tradicional y Pago Nivelado (Crédito de Nómina y Adelanto de Nómina)
 
@@ -6,8 +6,11 @@ Para el cálculo masivo del CAT Revolvente Con Amortización Tradicional y Pago 
 
 En la misma carpeta deberán de encontrarse:
 
-* Componente CAT_RT. Se espera un archivo llamado "CAT_RT.xlsm". 
-* Archivo de Datos. Deberá llamarse "Data.xlsx"
+* **Componente CAT_RT** (v1.1).\
+Se espera un archivo llamado "*CAT_RT.xlsm*".
+ 
+* **Archivo de Datos**.\
+Deberá llamarse "*Data.xlsx*"
 
 ## Uso
 
