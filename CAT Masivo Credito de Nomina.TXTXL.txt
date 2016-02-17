@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "CAT Masivo Credito de Nomina.xlsm"
-Fecha y hora de generación: 17/02/2016 11:34:52 a.m.
+Fecha y hora de generación: 17/02/2016 11:47:30 a.m.
 
 Resumen
 =======
