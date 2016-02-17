@@ -1,7 +1,10 @@
-## Componente CAT_RT
+# Corredor de Pruebas Masivas
 
-Para "consumirlo":
+Para el cálculo masivo del CAT Revolvente Con Amortización Tradicional y Pago Nivelado (Crédito de Nómina y Adelanto de Nómina)
 
-Deberá existir un libro llamado CAT_RT.xlsm en la misma ruta que el Runner.
+## Requisitos 
 
-Se asume que este libro es un Componente, por lo que sus hojas se ajustan a la convención de que sus parámetros de entrada inicial con "i." y sus resultados con "o."
+En la misma carpeta deberán de encontrarse:
+
+* Componente CAT_RT. Se espera un archivo llamado "CAT_RT.xlsm". 
+* Archivo de Datos. Deberá llamarse "Data.xlsx"
