@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "CAT Masivo Credito de Nomina.xlsm"
-Fecha y hora de generación: 17/02/2016 11:23:11 a.m.
+Fecha y hora de generación: 17/02/2016 11:34:52 a.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 3
 
- * Líneas de código VB: 54
+ * Líneas de código VB: 63
 
 Detalle
 =======
@@ -20,51 +20,6 @@ Hojas:
 
 Contenido:
 [Sheet1]
-[A1] \SIC\
-[B1] \COMISION_APERTURA\
-[B2] \240\
-[B3] \240\
-[B4] \240\
-[B5] \240\
-[B6] \240\
-[B7] \240\
-[C1] \MONTO\
-[C2] \5000\
-[C3] \50000\
-[C4] \500000\
-[C5] \5000\
-[C6] \50000\
-[C7] \500000\
-[D1] \TASA_OK\
-[D2] \30\
-[D3] \30\
-[D4] \30\
-[D5] \18\
-[D6] \18\
-[D7] \18\
-[E1] \PLAZO_OK\
-[E2] \18\
-[E3] \18\
-[Sheet1]
-[E4] \18\
-[E5] \18\
-[E6] \18\
-[E7] \18\
-[F1] \IVA\
-[F2] \0.16\
-[F3] \0.16\
-[F4] \0.16\
-[F5] \0.16\
-[F6] \0.16\
-[F7] \0.16\
-[G1] \FRECUENCIA_PAGO\
-[G2] \SEMANAL\
-[G3] \QUINCENAL\
-[G4] \SEMANAL\
-[G5] \SEMANAL\
-[G6] \QUINCENAL\
-[G7] \SEMANAL\
-[H1] \CAT\
 
 Nombres:
 
@@ -72,19 +27,15 @@ Nombre del proyecto VB: [VBAProject]
 
 Módulos VBA:
  [ThisWorkbook] Tipo: 100
- [Hoja1] Tipo: 100
  [Calcula] Tipo: 1
+ [Sheet1] Tipo: 100
 
 Codigo:
 [ThisWorkbook] 0 líneas de código.
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Hoja1] 0 líneas de código.
-///--- BEGINNING OF MODULE ---
-\\\--- END OF MODULE ---
-
-[Calcula] 54 líneas de código.
+[Calcula] 61 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -104,14 +55,24 @@ Private Const PARAM_PLAZO = "i.Plazo_En_Meses"
 Private Const PARAM_CAT = "o.CAT"
 
 Private Const FILENAME_CALC_BOOK = "CAT_RT.xlsm"
+Private Const FILENAME_DATA_BOOK = "DATA.xlsx"
 
 Private wsCalc As Worksheet
+Private wsSrc As Worksheet
 
 Sub Principal()
+    Dim stRutaLocal As String
+    stRutaLocal = ThisWorkbook.Path & Application.PathSeparator
+    
     'Abrir Libro de cálculo, obtener referencia a la primera hoja
     Dim wbCalc As Workbook
-    Set wbCalc = Workbooks.Open(ThisWorkbook.Path & Application.PathSeparator & FILENAME_CALC_BOOK)
+    Set wbCalc = Workbooks.Open(stRutaLocal & FILENAME_CALC_BOOK)
     Set wsCalc = wbCalc.Worksheets(1)
+    
+    'Abrir Libro de Datos
+    Dim wbData As Workbook
+    Set wbData = Workbooks.Open(stRutaLocal & FILENAME_DATA_BOOK)
+    Set wsSrc = wbData.Worksheets(1)
     
     'Ejecutar pruebas
     CorrerPruebas
@@ -119,14 +80,11 @@ Sub Principal()
     'Cerrar Libro de cálculo.
     wbCalc.Close False
     Set wbCalc = Nothing
+    Set wbData = Nothing
 End Sub
 
 Sub CorrerPruebas()
     Dim ix, nReg
-    
-    Dim wsSrc As Worksheet
-    
-    Set wsSrc = ThisWorkbook.Worksheets(1)
     
     nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
     For ix = 2 To nReg
@@ -140,6 +98,12 @@ Sub CorrerPruebas()
         wsSrc.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
     Next
 End Sub
+\\\--- END OF MODULE ---
+
+[Sheet1] 2 líneas de código.
+///--- BEGINNING OF MODULE ---
+Option Explicit
+
 \\\--- END OF MODULE ---
 
 
