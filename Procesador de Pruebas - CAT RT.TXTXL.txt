@@ -1,0 +1,111 @@
+Representación Textual del archivo de Excel: "CAT Masivo Credito de Nomina.xlsm"
+Fecha y hora de generación: 17/02/2016 11:47:30 a.m.
+
+Resumen
+=======
+
+ * Hojas: 1
+
+ * Nombres Definidos: 0
+
+ * Módulos de Visual Basic: 3
+
+ * Líneas de código VB: 63
+
+Detalle
+=======
+
+Hojas:
+ [Sheet1]
+
+Contenido:
+[Sheet1]
+
+Nombres:
+
+Nombre del proyecto VB: [VBAProject]
+
+Módulos VBA:
+ [ThisWorkbook] Tipo: 100
+ [Calcula] Tipo: 1
+ [Sheet1] Tipo: 100
+
+Codigo:
+[ThisWorkbook] 0 líneas de código.
+///--- BEGINNING OF MODULE ---
+\\\--- END OF MODULE ---
+
+[Calcula] 61 líneas de código.
+///--- BEGINNING OF MODULE ---
+Option Explicit
+
+Private Const COL_COMISIÓN = 2
+Private Const COL_MONTO = 3
+Private Const COL_TASA = 4
+Private Const COL_PLAZO = 5
+Private Const COL_IVA = 6
+Private Const COL_CAT = 8
+
+Private Const PARAM_MONTO = "i.Monto_Línea"
+Private Const PARAM_TASA = "i.Tasa_Anual"
+Private Const PARAM_IVA = "i.Tasa_IVA_Interes"
+Private Const PARAM_COMISIÓN = "i.Comisiones_Iniciales"
+Private Const PARAM_COM_REDISP = "i.Comisión_Redisposición"
+Private Const PARAM_PLAZO = "i.Plazo_En_Meses"
+Private Const PARAM_CAT = "o.CAT"
+
+Private Const FILENAME_CALC_BOOK = "CAT_RT.xlsm"
+Private Const FILENAME_DATA_BOOK = "DATA.xlsx"
+
+Private wsCalc As Worksheet
+Private wsSrc As Worksheet
+
+Sub Principal()
+    Dim stRutaLocal As String
+    stRutaLocal = ThisWorkbook.Path & Application.PathSeparator
+    
+    'Abrir Libro de cálculo, obtener referencia a la primera hoja
+    Dim wbCalc As Workbook
+    Set wbCalc = Workbooks.Open(stRutaLocal & FILENAME_CALC_BOOK)
+    Set wsCalc = wbCalc.Worksheets(1)
+    
+    'Abrir Libro de Datos
+    Dim wbData As Workbook
+    Set wbData = Workbooks.Open(stRutaLocal & FILENAME_DATA_BOOK)
+    Set wsSrc = wbData.Worksheets(1)
+    
+    'Ejecutar pruebas
+    CorrerPruebas
+    
+    'Cerrar Libro de cálculo.
+    wbCalc.Close False
+    Set wbCalc = Nothing
+    Set wbData = Nothing
+End Sub
+
+Sub CorrerPruebas()
+    Dim ix, nReg
+    
+    nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
+    For ix = 2 To nReg
+        
+        wsCalc.Range(PARAM_COMISIÓN) = wsSrc.Cells(ix, COL_COMISIÓN).Value
+        wsCalc.Range(PARAM_MONTO) = wsSrc.Cells(ix, COL_MONTO).Value
+        wsCalc.Range(PARAM_TASA) = wsSrc.Cells(ix, COL_TASA) / 100
+        wsCalc.Range(PARAM_PLAZO) = wsSrc.Cells(ix, COL_PLAZO)
+        wsCalc.Range(PARAM_IVA) = wsSrc.Cells(ix, COL_IVA)
+        
+        wsSrc.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+    Next
+End Sub
+\\\--- END OF MODULE ---
+
+[Sheet1] 2 líneas de código.
+///--- BEGINNING OF MODULE ---
+Option Explicit
+
+\\\--- END OF MODULE ---
+
+
+** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
+Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
