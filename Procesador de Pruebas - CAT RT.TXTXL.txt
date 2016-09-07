@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 07/09/2016 01:41:28 p.m.
+Fecha y hora de generación: 07/09/2016 02:04:50 p.m.
 
 Resumen
 =======
@@ -112,7 +112,7 @@ Sub CorrerPruebas()
         End If
         
         DoEvents
-        If ix Mod 100 = 0 Then Application.StatusBar = "Fila " & FormatNumber(ix, 0)
+        If ix Mod 100 = 0 Then Application.StatusBar = "Fila " & FormatNumber(ix, 0) & " [" & FormatNumber(ix / nReg * 100, 2) & "%]"
     Next
 End Sub
 \\\--- END OF MODULE ---
