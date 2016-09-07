@@ -1,5 +1,5 @@
-Representación Textual del archivo de Excel: "CAT Masivo Credito de Nomina.xlsm"
-Fecha y hora de generación: 17/02/2016 11:47:30 a.m.
+Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
+Fecha y hora de generación: 07/09/2016 01:41:28 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 3
 
- * Líneas de código VB: 63
+ * Líneas de código VB: 80
 
 Detalle
 =======
@@ -35,7 +35,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 61 líneas de código.
+[Calcula] 78 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -61,7 +61,14 @@ Private wsCalc As Worksheet
 Private wsSrc As Worksheet
 
 Sub Principal()
+On Error GoTo err_hand
+    Application.EnableCancelKey = xlErrorHandler
+
     Dim stRutaLocal As String
+    
+    Application.ScreenUpdating = False
+    Application.StatusBar = "Iniciando cálculo..."
+    
     stRutaLocal = ThisWorkbook.Path & Application.PathSeparator
     
     'Abrir Libro de cálculo, obtener referencia a la primera hoja
@@ -77,10 +84,15 @@ Sub Principal()
     'Ejecutar pruebas
     CorrerPruebas
     
+err_hand:
     'Cerrar Libro de cálculo.
     wbCalc.Close False
     Set wbCalc = Nothing
     Set wbData = Nothing
+    
+    Application.ScreenUpdating = True
+    Application.StatusBar = False
+    
 End Sub
 
 Sub CorrerPruebas()
@@ -89,13 +101,18 @@ Sub CorrerPruebas()
     nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
     For ix = 2 To nReg
         
-        wsCalc.Range(PARAM_COMISIÓN) = wsSrc.Cells(ix, COL_COMISIÓN).Value
-        wsCalc.Range(PARAM_MONTO) = wsSrc.Cells(ix, COL_MONTO).Value
-        wsCalc.Range(PARAM_TASA) = wsSrc.Cells(ix, COL_TASA) / 100
-        wsCalc.Range(PARAM_PLAZO) = wsSrc.Cells(ix, COL_PLAZO)
-        wsCalc.Range(PARAM_IVA) = wsSrc.Cells(ix, COL_IVA)
+        If wsSrc.Cells(ix, COL_CAT) = "" Then
+            wsCalc.Range(PARAM_COMISIÓN) = wsSrc.Cells(ix, COL_COMISIÓN).Value
+            wsCalc.Range(PARAM_MONTO) = wsSrc.Cells(ix, COL_MONTO).Value
+            wsCalc.Range(PARAM_TASA) = wsSrc.Cells(ix, COL_TASA) / 100
+            wsCalc.Range(PARAM_PLAZO) = wsSrc.Cells(ix, COL_PLAZO)
+            wsCalc.Range(PARAM_IVA) = wsSrc.Cells(ix, COL_IVA)
+            
+            wsSrc.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+        End If
         
-        wsSrc.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+        DoEvents
+        If ix Mod 100 = 0 Then Application.StatusBar = "Fila " & FormatNumber(ix, 0)
     Next
 End Sub
 \\\--- END OF MODULE ---
