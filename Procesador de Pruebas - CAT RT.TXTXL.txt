@@ -1,16 +1,12 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 07/09/2016 02:04:50 p.m.
+Fecha y hora de generación: 07/09/2016 07:41:08 p.m.
 
 Resumen
 =======
-
  * Hojas: 1
-
  * Nombres Definidos: 0
-
  * Módulos de Visual Basic: 3
-
- * Líneas de código VB: 80
+ * Líneas de código VB: 139
 
 Detalle
 =======
@@ -35,7 +31,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 78 líneas de código.
+[Calcula] 137 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -60,15 +56,20 @@ Private Const FILENAME_DATA_BOOK = "DATA.xlsx"
 Private wsCalc As Worksheet
 Private wsSrc As Worksheet
 
+Dim ix As Long 'Indice de la fila que se está procesando.
+Dim nReg As Long 'Número de filas totales.
+
+Private StartTime As Date
+
+Private RunWhen As Double
+Private Const cRunIntervalSeconds = 1
+Private Const cRunWhat = "ActualizaStatus"
+
 Sub Principal()
 On Error GoTo err_hand
     Application.EnableCancelKey = xlErrorHandler
 
     Dim stRutaLocal As String
-    
-    Application.ScreenUpdating = False
-    Application.StatusBar = "Iniciando cálculo..."
-    
     stRutaLocal = ThisWorkbook.Path & Application.PathSeparator
     
     'Abrir Libro de cálculo, obtener referencia a la primera hoja
@@ -81,24 +82,41 @@ On Error GoTo err_hand
     Set wbData = Workbooks.Open(stRutaLocal & FILENAME_DATA_BOOK)
     Set wsSrc = wbData.Worksheets(1)
     
+    'Fix?
+    ThisWorkbook.Activate
+    Application.ScreenUpdating = False
+    
+    'Filas totales
+    nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
+    
     'Ejecutar pruebas
+    StartTime = Time() 'Iniciamos el cronómetro
     CorrerPruebas
     
 err_hand:
+    ApagarEvento
+ 
     'Cerrar Libro de cálculo.
     wbCalc.Close False
     Set wbCalc = Nothing
+    
+    wbData.Activate
     Set wbData = Nothing
     
     Application.ScreenUpdating = True
     Application.StatusBar = False
     
+    If Err.Number = 0 Then
+        MsgBox "Proceso terminado en " & FriendlySeconds(DateDiff("s", StartTime, Time())) & vbCrLf & _
+                "Grabe el Libro!"
+    Else
+        Debug.Print Err.Number & " - " & Err.Description
+    End If
+    
 End Sub
 
 Sub CorrerPruebas()
-    Dim ix, nReg
-    
-    nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
+    ProgramarEvento
     For ix = 2 To nReg
         
         If wsSrc.Cells(ix, COL_CAT) = "" Then
@@ -110,10 +128,47 @@ Sub CorrerPruebas()
             
             wsSrc.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
         End If
-        
         DoEvents
-        If ix Mod 100 = 0 Then Application.StatusBar = "Fila " & FormatNumber(ix, 0) & " [" & FormatNumber(ix / nReg * 100, 2) & "%]"
     Next
+End Sub
+
+'Regresa una cadena con una duración "amigable"
+Function FriendlySeconds(Seconds As Long) As String
+    Dim strResultado As String: strResultado = FormatNumber(Seconds, 0) + "s"
+    If Seconds > 60 Then strResultado = strResultado & " (" + CStr(Int(Seconds / 60)) & ":" & PadCeros(Seconds - (60 * Int(Seconds / 60))) & "m)"
+    FriendlySeconds = strResultado
+End Function
+
+'Rellena ceros a la izquierda.
+Function PadCeros(s)
+    PadCeros = Right(String(2, "0") & s, 2)
+End Function
+
+Sub ProgramarEvento()
+    RunWhen = Now + TimeSerial(0, 0, cRunIntervalSeconds)
+    Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, Schedule:=True
+End Sub
+Sub ApagarEvento()
+    On Error Resume Next
+    Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, Schedule:=False
+End Sub
+
+Sub ActualizaStatus()
+    Dim Status As String
+    
+    Dim Porcentaje: Porcentaje = ix / nReg * 100
+    Dim SegundosTranscurridos As Long: SegundosTranscurridos = DateDiff("s", StartTime, Time())
+    Dim TotalEstimado As Long: TotalEstimado = 0: If Porcentaje > 0 Then TotalEstimado = SegundosTranscurridos * 100 / Porcentaje
+    Dim SegundosRestantes As Long: SegundosRestantes = TotalEstimado - SegundosTranscurridos
+    
+    Status = "Fila #" & FormatNumber(ix, 0)
+    Status = Status & " | " & "[" & FormatNumber(Porcentaje) & "%]"
+    Status = Status & " | " & "Transcurridos: " & FriendlySeconds(SegundosTranscurridos)
+    Status = Status & " | " & "Total Estimado: " & FriendlySeconds(TotalEstimado)
+    Status = Status & " | " & "Restante Estimado: " & FriendlySeconds(SegundosRestantes)
+    
+    Application.StatusBar = Status
+    ProgramarEvento
 End Sub
 \\\--- END OF MODULE ---
 
@@ -124,5 +179,5 @@ Option Explicit
 \\\--- END OF MODULE ---
 
 
-** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
-Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
+** Fin del proceso de exportación. Proceso realizado en 0.00 minutos. **
+ExportToTxt [ExportToTxt.xls] v3.0.0-SNAPSHOT (Standalone)
