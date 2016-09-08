@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 08/09/2016 08:35:56 a.m.
+Fecha y hora de generación: 08/09/2016 08:46:48 a.m.
 
 Resumen
 =======
@@ -8,7 +8,7 @@ Resumen
 
  * Nombres Definidos: 0
 
- * Módulos de Visual Basic: 5
+ * Módulos de Visual Basic: 6
 
  * Líneas de código VB: 160
 
@@ -31,13 +31,14 @@ Módulos VBA:
  [Sheet1] Tipo: 100
  [Utils] Tipo: 1
  [Stopwatch] Tipo: 1
+ [Esqueleto] Tipo: 1
 
 Codigo:
 [ThisWorkbook] 0 líneas de código.
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 134 líneas de código.
+[Calcula] 108 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -71,32 +72,6 @@ Dim nReg As Long
 Private RunWhen As Double
 Private Const RUN_INTERVAL_SECONDS = 1
 Private Const RUN_PROCEDURE = "ActualizaStatus"
-
-Sub Principal()
-On Error GoTo err_hand
-    Application.EnableCancelKey = xlErrorHandler
-    Application.ScreenUpdating = False
-    
-    ConfiguraAmbiente
-    
-    Stopwatch.Start
-    CorrerPruebas
-    
-err_hand:
-    ApagarAmbiente
-    
-    Application.ScreenUpdating = True
-    Application.StatusBar = False
-    
-    AppActivate ThisWorkbook.Application.Caption
-    
-    If Err.Number = 0 Then
-        MsgBox "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
-    Else
-        Debug.Print Err.Number & " - " & Err.Description
-    End If
-    
-End Sub
 
 Sub ConfiguraAmbiente()
     Dim stRutaLocal As String
@@ -165,9 +140,9 @@ Sub ActualizaStatus()
     Status = "Fila #" & FormatNumber(ix, 0)
     Status = Status & " | " & "" & FormatNumber(Porcentaje, 0) & "%"
     Status = Status & " | " & "" & FormatNumber(Velocidad, 0) & "f/s"
-    Status = Status & " | " & "Transcurridos: " & FriendlySeconds(SegundosTranscurridos)
-    Status = Status & " | " & "Restante Estimado: " & FriendlySeconds(SegundosRestantes)
-    Status = Status & " | " & "Total Estimado: " & FriendlySeconds(TotalEstimado)
+    Status = Status & " | " & "Trans " & FriendlySeconds(SegundosTranscurridos)
+    Status = Status & " | " & "Resta " & FriendlySeconds(SegundosRestantes)
+    Status = Status & " | " & "Total " & FriendlySeconds(TotalEstimado)
     
     Application.StatusBar = Status
     
@@ -211,6 +186,36 @@ End Sub
 Function Ellapsed() As Long
     Ellapsed = DateDiff("s", StartTime, Now)
 End Function
+\\\--- END OF MODULE ---
+
+[Esqueleto] 26 líneas de código.
+///--- BEGINNING OF MODULE ---
+Option Explicit
+
+Sub Principal()
+On Error GoTo err_hand
+    Application.EnableCancelKey = xlErrorHandler
+    Application.ScreenUpdating = False
+    
+    ConfiguraAmbiente
+    
+    Stopwatch.Start
+    CorrerPruebas
+    
+err_hand:
+    ApagarAmbiente
+    
+    Application.ScreenUpdating = True
+    Application.StatusBar = False
+    
+    AppActivate ThisWorkbook.Application.Caption
+    
+    If Err.Number = 0 Then
+        MsgBox "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
+    Else
+        Debug.Print Err.Number & " - " & Err.Description
+    End If
+End Sub
 \\\--- END OF MODULE ---
 
 
