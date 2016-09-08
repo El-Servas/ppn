@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 08/09/2016 08:46:48 a.m.
+Fecha y hora de generación: 08/09/2016 08:55:10 a.m.
 
 Resumen
 =======
@@ -20,6 +20,13 @@ Hojas:
 
 Contenido:
 [Sheet1]
+[B2] \Procesador de Pruebas para CAT Revolvente Pago Tradicional (CAT_RT)\
+[B4] \Requiere los siguientes archivos en la misma carpeta:\
+[C6] \* CAT_RT.xlsm\
+[C7] \* Data.xlsx\
+[E6] \v1.1\
+[E7] \Con el formato adecuado\
+[L2] \v1.0\
 
 Nombres:
 
