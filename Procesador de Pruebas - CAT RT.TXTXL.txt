@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 08/09/2016 08:05:36 a.m.
+Fecha y hora de generación: 08/09/2016 08:35:56 a.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 5
 
- * Líneas de código VB: 151
+ * Líneas de código VB: 160
 
 Detalle
 =======
@@ -37,7 +37,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 125 líneas de código.
+[Calcula] 134 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -59,90 +59,98 @@ Private Const PARAM_CAT = "o.CAT"
 Private Const FILENAME_CALC_BOOK = "CAT_RT.xlsm"
 Private Const FILENAME_DATA_BOOK = "DATA.xlsx"
 
+Private wbCalc As Workbook
 Private wsCalc As Worksheet
-Private wsSrc As Worksheet
 
-Dim ix As Long 'Indice de la fila que se está procesando.
-Dim nReg As Long 'Número de filas totales.
+Private wbData As Workbook
+Private wsData As Worksheet
+
+Dim ix As Long
+Dim nReg As Long
 
 Private RunWhen As Double
-Private Const cRunIntervalSeconds = 1
-Private Const cRunWhat = "ActualizaStatus"
+Private Const RUN_INTERVAL_SECONDS = 1
+Private Const RUN_PROCEDURE = "ActualizaStatus"
 
 Sub Principal()
 On Error GoTo err_hand
     Application.EnableCancelKey = xlErrorHandler
-
-    Dim stRutaLocal As String
-    stRutaLocal = ThisWorkbook.Path & Application.PathSeparator
-    
-    'Abrir Libro de cálculo, obtener referencia a la primera hoja
-    Dim wbCalc As Workbook
-    Set wbCalc = Workbooks.Open(stRutaLocal & FILENAME_CALC_BOOK)
-    Set wsCalc = wbCalc.Worksheets(1)
-    
-    'Abrir Libro de Datos
-    Dim wbData As Workbook
-    Set wbData = Workbooks.Open(stRutaLocal & FILENAME_DATA_BOOK)
-    Set wsSrc = wbData.Worksheets(1)
-    
-    'Fix?
-    ThisWorkbook.Activate
     Application.ScreenUpdating = False
     
-    'Filas totales
-    nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
+    ConfiguraAmbiente
     
-    'Ejecutar pruebas
     Stopwatch.Start
     CorrerPruebas
     
 err_hand:
-    ApagarEvento
- 
-    'Cerrar Libro de cálculo.
-    wbCalc.Close False
-    Set wbCalc = Nothing
-    
-    wbData.Activate
-    Set wbData = Nothing
+    ApagarAmbiente
     
     Application.ScreenUpdating = True
     Application.StatusBar = False
     
+    AppActivate ThisWorkbook.Application.Caption
+    
     If Err.Number = 0 Then
-        MsgBox "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed) & vbCrLf & _
-                "Grabe el Libro!"
+        MsgBox "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
     Else
         Debug.Print Err.Number & " - " & Err.Description
     End If
     
 End Sub
 
+Sub ConfiguraAmbiente()
+    Dim stRutaLocal As String
+    stRutaLocal = ThisWorkbook.Path & Application.PathSeparator
+    
+    'Libro de cálculo
+    Set wbCalc = Workbooks.Open(stRutaLocal & FILENAME_CALC_BOOK)
+    Set wsCalc = wbCalc.Worksheets(1)
+    
+    'Libro de Datos
+    Set wbData = Workbooks.Open(stRutaLocal & FILENAME_DATA_BOOK)
+    Set wsData = wbData.Worksheets(1)
+    
+    ThisWorkbook.Activate
+    
+    'Filas totales
+    nReg = wsData.Cells(1).CurrentRegion.Rows.Count
+End Sub
+
 Sub CorrerPruebas()
-    ProgramarEvento
+    ProgramarActualizacionStatus
     For ix = 2 To nReg
         
-        If wsSrc.Cells(ix, COL_CAT) = "" Then
-            wsCalc.Range(PARAM_COMISIÓN) = wsSrc.Cells(ix, COL_COMISIÓN).Value
-            wsCalc.Range(PARAM_MONTO) = wsSrc.Cells(ix, COL_MONTO).Value
-            wsCalc.Range(PARAM_TASA) = wsSrc.Cells(ix, COL_TASA) / 100
-            wsCalc.Range(PARAM_PLAZO) = wsSrc.Cells(ix, COL_PLAZO)
-            wsCalc.Range(PARAM_IVA) = wsSrc.Cells(ix, COL_IVA)
+        If wsData.Cells(ix, COL_CAT) = "" Then
+            wsCalc.Range(PARAM_COMISIÓN) = wsData.Cells(ix, COL_COMISIÓN).Value
+            wsCalc.Range(PARAM_MONTO) = wsData.Cells(ix, COL_MONTO).Value
+            wsCalc.Range(PARAM_TASA) = wsData.Cells(ix, COL_TASA) / 100
+            wsCalc.Range(PARAM_PLAZO) = wsData.Cells(ix, COL_PLAZO)
+            wsCalc.Range(PARAM_IVA) = wsData.Cells(ix, COL_IVA)
             
-            wsSrc.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+            wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
         End If
         DoEvents
     Next
 End Sub
 
-Sub ProgramarEvento()
-    RunWhen = Now + TimeSerial(0, 0, cRunIntervalSeconds)
-    Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, Schedule:=True
+Sub ApagarAmbiente()
+    ApagarActualizacionStatus
+ 
+    wbCalc.Close False
+    Set wbCalc = Nothing
+    
+    wbData.Activate
+    Set wbData = Nothing
 End Sub
-Sub ApagarEvento()
+
+Sub ProgramarActualizacionStatus()
+    RunWhen = Now + TimeSerial(0, 0, RUN_INTERVAL_SECONDS)
+    Application.OnTime EarliestTime:=RunWhen, Procedure:=RUN_PROCEDURE, Schedule:=True
+End Sub
+
+Sub ApagarActualizacionStatus()
     On Error Resume Next
-    Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, Schedule:=False
+    Application.OnTime EarliestTime:=RunWhen, Procedure:=RUN_PROCEDURE, Schedule:=False
 End Sub
 
 Sub ActualizaStatus()
@@ -162,7 +170,8 @@ Sub ActualizaStatus()
     Status = Status & " | " & "Total Estimado: " & FriendlySeconds(TotalEstimado)
     
     Application.StatusBar = Status
-    ProgramarEvento
+    
+    ProgramarActualizacionStatus
 End Sub
 \\\--- END OF MODULE ---
 
