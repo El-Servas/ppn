@@ -1,12 +1,16 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 07/09/2016 07:41:08 p.m.
+Fecha y hora de generación: 08/09/2016 07:59:42 a.m.
 
 Resumen
 =======
+
  * Hojas: 1
+
  * Nombres Definidos: 0
- * Módulos de Visual Basic: 3
- * Líneas de código VB: 139
+
+ * Módulos de Visual Basic: 4
+
+ * Líneas de código VB: 142
 
 Detalle
 =======
@@ -25,13 +29,14 @@ Módulos VBA:
  [ThisWorkbook] Tipo: 100
  [Calcula] Tipo: 1
  [Sheet1] Tipo: 100
+ [Utils] Tipo: 1
 
 Codigo:
 [ThisWorkbook] 0 líneas de código.
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 137 líneas de código.
+[Calcula] 127 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -132,18 +137,6 @@ Sub CorrerPruebas()
     Next
 End Sub
 
-'Regresa una cadena con una duración "amigable"
-Function FriendlySeconds(Seconds As Long) As String
-    Dim strResultado As String: strResultado = FormatNumber(Seconds, 0) + "s"
-    If Seconds > 60 Then strResultado = strResultado & " (" + CStr(Int(Seconds / 60)) & ":" & PadCeros(Seconds - (60 * Int(Seconds / 60))) & "m)"
-    FriendlySeconds = strResultado
-End Function
-
-'Rellena ceros a la izquierda.
-Function PadCeros(s)
-    PadCeros = Right(String(2, "0") & s, 2)
-End Function
-
 Sub ProgramarEvento()
     RunWhen = Now + TimeSerial(0, 0, cRunIntervalSeconds)
     Application.OnTime EarliestTime:=RunWhen, Procedure:=cRunWhat, Schedule:=True
@@ -160,12 +153,14 @@ Sub ActualizaStatus()
     Dim SegundosTranscurridos As Long: SegundosTranscurridos = DateDiff("s", StartTime, Time())
     Dim TotalEstimado As Long: TotalEstimado = 0: If Porcentaje > 0 Then TotalEstimado = SegundosTranscurridos * 100 / Porcentaje
     Dim SegundosRestantes As Long: SegundosRestantes = TotalEstimado - SegundosTranscurridos
+    Dim Velocidad: Velocidad = ix / SegundosTranscurridos
     
     Status = "Fila #" & FormatNumber(ix, 0)
-    Status = Status & " | " & "[" & FormatNumber(Porcentaje) & "%]"
+    Status = Status & " | " & "" & FormatNumber(Porcentaje, 0) & "%"
+    Status = Status & " | " & "" & FormatNumber(Velocidad, 0) & "f/s"
     Status = Status & " | " & "Transcurridos: " & FriendlySeconds(SegundosTranscurridos)
-    Status = Status & " | " & "Total Estimado: " & FriendlySeconds(TotalEstimado)
     Status = Status & " | " & "Restante Estimado: " & FriendlySeconds(SegundosRestantes)
+    Status = Status & " | " & "Total Estimado: " & FriendlySeconds(TotalEstimado)
     
     Application.StatusBar = Status
     ProgramarEvento
@@ -178,6 +173,23 @@ Option Explicit
 
 \\\--- END OF MODULE ---
 
+[Utils] 13 líneas de código.
+///--- BEGINNING OF MODULE ---
+Option Explicit
 
-** Fin del proceso de exportación. Proceso realizado en 0.00 minutos. **
-ExportToTxt [ExportToTxt.xls] v3.0.0-SNAPSHOT (Standalone)
+'Regresa una cadena con una duración "amigable"
+Function FriendlySeconds(Seconds As Long) As String
+    Dim strResultado As String: strResultado = FormatNumber(Seconds, 0) + "s"
+    If Seconds > 60 Then strResultado = strResultado & " (" + CStr(Int(Seconds / 60)) & ":" & PadCeros(Seconds - (60 * Int(Seconds / 60))) & "m)"
+    FriendlySeconds = strResultado
+End Function
+
+'Rellena ceros a la izquierda.
+Function PadCeros(s)
+    PadCeros = Right(String(2, "0") & s, 2)
+End Function
+\\\--- END OF MODULE ---
+
+
+** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
+Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
