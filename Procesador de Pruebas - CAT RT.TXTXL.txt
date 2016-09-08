@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 08/09/2016 07:59:42 a.m.
+Fecha y hora de generación: 08/09/2016 08:05:36 a.m.
 
 Resumen
 =======
@@ -8,9 +8,9 @@ Resumen
 
  * Nombres Definidos: 0
 
- * Módulos de Visual Basic: 4
+ * Módulos de Visual Basic: 5
 
- * Líneas de código VB: 142
+ * Líneas de código VB: 151
 
 Detalle
 =======
@@ -30,13 +30,14 @@ Módulos VBA:
  [Calcula] Tipo: 1
  [Sheet1] Tipo: 100
  [Utils] Tipo: 1
+ [Stopwatch] Tipo: 1
 
 Codigo:
 [ThisWorkbook] 0 líneas de código.
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 127 líneas de código.
+[Calcula] 125 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -63,8 +64,6 @@ Private wsSrc As Worksheet
 
 Dim ix As Long 'Indice de la fila que se está procesando.
 Dim nReg As Long 'Número de filas totales.
-
-Private StartTime As Date
 
 Private RunWhen As Double
 Private Const cRunIntervalSeconds = 1
@@ -95,7 +94,7 @@ On Error GoTo err_hand
     nReg = wsSrc.Cells(1).CurrentRegion.Rows.Count
     
     'Ejecutar pruebas
-    StartTime = Time() 'Iniciamos el cronómetro
+    Stopwatch.Start
     CorrerPruebas
     
 err_hand:
@@ -112,7 +111,7 @@ err_hand:
     Application.StatusBar = False
     
     If Err.Number = 0 Then
-        MsgBox "Proceso terminado en " & FriendlySeconds(DateDiff("s", StartTime, Time())) & vbCrLf & _
+        MsgBox "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed) & vbCrLf & _
                 "Grabe el Libro!"
     Else
         Debug.Print Err.Number & " - " & Err.Description
@@ -150,7 +149,7 @@ Sub ActualizaStatus()
     Dim Status As String
     
     Dim Porcentaje: Porcentaje = ix / nReg * 100
-    Dim SegundosTranscurridos As Long: SegundosTranscurridos = DateDiff("s", StartTime, Time())
+    Dim SegundosTranscurridos As Long: SegundosTranscurridos = Stopwatch.Ellapsed
     Dim TotalEstimado As Long: TotalEstimado = 0: If Porcentaje > 0 Then TotalEstimado = SegundosTranscurridos * 100 / Porcentaje
     Dim SegundosRestantes As Long: SegundosRestantes = TotalEstimado - SegundosTranscurridos
     Dim Velocidad: Velocidad = ix / SegundosTranscurridos
@@ -187,6 +186,21 @@ End Function
 'Rellena ceros a la izquierda.
 Function PadCeros(s)
     PadCeros = Right(String(2, "0") & s, 2)
+End Function
+\\\--- END OF MODULE ---
+
+[Stopwatch] 11 líneas de código.
+///--- BEGINNING OF MODULE ---
+Option Explicit
+
+Private StartTime As Date
+
+Sub Start()
+    StartTime = Now
+End Sub
+
+Function Ellapsed() As Long
+    Ellapsed = DateDiff("s", StartTime, Now)
 End Function
 \\\--- END OF MODULE ---
 
