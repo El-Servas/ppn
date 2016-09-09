@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 08/09/2016 08:55:10 a.m.
+Fecha y hora de generación: 09/09/2016 10:22:33 a.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 160
+ * Líneas de código VB: 168
 
 Detalle
 =======
@@ -45,7 +45,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 108 líneas de código.
+[Calcula] 116 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -63,6 +63,9 @@ Private Const PARAM_COMISIÓN = "i.Comisiones_Iniciales"
 Private Const PARAM_COM_REDISP = "i.Comisión_Redisposición"
 Private Const PARAM_PLAZO = "i.Plazo_En_Meses"
 Private Const PARAM_CAT = "o.CAT"
+
+Private Const ERROR_CONSTANT = "NA*"
+Private HuboError As Boolean
 
 Private Const FILENAME_CALC_BOOK = "CAT_RT.xlsm"
 Private Const FILENAME_DATA_BOOK = "DATA.xlsx"
@@ -109,7 +112,12 @@ Sub CorrerPruebas()
             wsCalc.Range(PARAM_PLAZO) = wsData.Cells(ix, COL_PLAZO)
             wsCalc.Range(PARAM_IVA) = wsData.Cells(ix, COL_IVA)
             
-            wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+            If Not IsError(wsCalc.Range(PARAM_CAT)) Then
+                wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+            Else
+                wsData.Cells(ix, COL_CAT) = ERROR_CONSTANT
+                HuboError = True
+            End If
         End If
         DoEvents
     Next
