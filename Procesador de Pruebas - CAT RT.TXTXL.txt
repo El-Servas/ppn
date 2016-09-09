@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 09/09/2016 01:10:49 p.m.
+Fecha y hora de generación: 09/09/2016 01:39:18 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 177
+ * Líneas de código VB: 203
 
 Detalle
 =======
@@ -200,7 +200,7 @@ Option Explicit
 
 \\\--- END OF MODULE ---
 
-[Utils] 13 líneas de código.
+[Utils] 39 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -215,6 +215,32 @@ End Function
 Function PadCeros(s)
     PadCeros = Right(String(2, "0") & s, 2)
 End Function
+
+
+'==============================================================================
+
+Sub test()
+    'Tabla de parámetros
+    Dim Rg As Range, cl As Range
+    Set Rg = Range("MAPEO_START").CurrentRegion
+    Set Rg = Rg.Resize(Rg.Rows.Count - 1)
+    Set Rg = Rg.Offset(1)
+    Set Rg = Rg.Columns(1)
+    'Rg.Select
+
+    For Each cl In Rg.Cells
+        Dim Parametro As String: Parametro = cl.Value
+        Dim Tipo, Valor
+        If cl.Offset(0, 1) <> "" Then
+            Tipo = "Mapeado"
+            Valor = cl.Offset(0, 1)
+        Else
+            Tipo = "Valor"
+            Valor = cl.Offset(0, 2)
+        End If
+        Debug.Print Parametro, Tipo, Valor
+    Next
+End Sub
 \\\--- END OF MODULE ---
 
 [Stopwatch] 11 líneas de código.
