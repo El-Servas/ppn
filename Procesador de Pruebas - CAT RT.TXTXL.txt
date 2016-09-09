@@ -1,12 +1,12 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 09/09/2016 10:35:13 a.m.
+Fecha y hora de generación: 09/09/2016 11:52:49 a.m.
 
 Resumen
 =======
 
  * Hojas: 1
 
- * Nombres Definidos: 0
+ * Nombres Definidos: 2
 
  * Módulos de Visual Basic: 6
 
@@ -16,19 +16,32 @@ Detalle
 =======
 
 Hojas:
- [Sheet1]
+ [Consola]
 
 Contenido:
-[Sheet1]
+[Consola]
 [B2] \Procesador de Pruebas para CAT Revolvente Pago Tradicional (CAT_RT)\
 [B4] \Requiere los siguientes archivos en la misma carpeta:\
 [C6] \* CAT_RT.xlsm\
 [C7] \* Data.xlsx\
 [E6] \v1.1\
 [E7] \Con el formato adecuado\
-[L2] \v1.0.1\
+[I9] \Mapeo de Columnas en Archivo de Datos\
+[I12] \i.Monto_Línea\
+[I13] \i.Tasa_Anual\
+[I14] \i.Tasa_IVA_Interes\
+[I15] \i.Comisiones_Iniciales\
+[I16] \i.Comisión_Redisposición\
+[I17] \i.Plazo_En_Meses\
+[J11] \Columna\
+[K2] \v1.0.1\
+[K11] \Valor\
+[K15] \240\
+[K16] \120\
 
 Nombres:
+ [COMISION_APERTURA_COMUN] =Consola!#REF!
+ [COMISION_REDISPOSICION_COMUN] =Consola!#REF!
 
 Nombre del proyecto VB: [VBAProject]
 
