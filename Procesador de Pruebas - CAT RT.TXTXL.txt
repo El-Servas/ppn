@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 09/09/2016 10:22:33 a.m.
+Fecha y hora de generación: 09/09/2016 10:35:13 a.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 168
+ * Líneas de código VB: 177
 
 Detalle
 =======
@@ -26,7 +26,7 @@ Contenido:
 [C7] \* Data.xlsx\
 [E6] \v1.1\
 [E7] \Con el formato adecuado\
-[L2] \v1.0\
+[L2] \v1.0.1\
 
 Nombres:
 
@@ -45,7 +45,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 116 líneas de código.
+[Calcula] 123 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -65,7 +65,8 @@ Private Const PARAM_PLAZO = "i.Plazo_En_Meses"
 Private Const PARAM_CAT = "o.CAT"
 
 Private Const ERROR_CONSTANT = "NA*"
-Private HuboError As Boolean
+Private HuboError As Long
+Public Mensaje As String
 
 Private Const FILENAME_CALC_BOOK = "CAT_RT.xlsm"
 Private Const FILENAME_DATA_BOOK = "DATA.xlsx"
@@ -99,6 +100,8 @@ Sub ConfiguraAmbiente()
     
     'Filas totales
     nReg = wsData.Cells(1).CurrentRegion.Rows.Count
+    HuboError = 0
+    Mensaje = ""
 End Sub
 
 Sub CorrerPruebas()
@@ -115,12 +118,16 @@ Sub CorrerPruebas()
             If Not IsError(wsCalc.Range(PARAM_CAT)) Then
                 wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
             Else
-                wsData.Cells(ix, COL_CAT) = ERROR_CONSTANT
-                HuboError = True
+                HuboError = HuboError + 1
+                With wsData.Cells(ix, COL_CAT)
+                    .Value = ERROR_CONSTANT
+                    .Font.Color = -16776961
+                End With
             End If
         End If
         DoEvents
     Next
+    If HuboError Then Mensaje = "PRECAUCIÓN: Hubo (" & HuboError & ") registros con error."
 End Sub
 
 Sub ApagarAmbiente()
@@ -203,7 +210,7 @@ Function Ellapsed() As Long
 End Function
 \\\--- END OF MODULE ---
 
-[Esqueleto] 26 líneas de código.
+[Esqueleto] 28 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -226,7 +233,9 @@ err_hand:
     AppActivate ThisWorkbook.Application.Caption
     
     If Err.Number = 0 Then
-        MsgBox "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
+        Dim Msg: Msg = "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
+        If Calcula.Mensaje <> "" Then Msg = Msg & vbCrLf & vbCrLf & Calcula.Mensaje
+        MsgBox Msg
     Else
         Debug.Print Err.Number & " - " & Err.Description
     End If
