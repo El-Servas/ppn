@@ -1,12 +1,12 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 09/09/2016 11:52:49 a.m.
+Fecha y hora de generación: 09/09/2016 11:58:29 a.m.
 
 Resumen
 =======
 
  * Hojas: 1
 
- * Nombres Definidos: 2
+ * Nombres Definidos: 0
 
  * Módulos de Visual Basic: 6
 
@@ -34,14 +34,16 @@ Contenido:
 [I16] \i.Comisión_Redisposición\
 [I17] \i.Plazo_En_Meses\
 [J11] \Columna\
+[J12] \OFERTA\
+[J13] \TASA\
+[J14] \IVA\
+[J17] \PLAZO\
 [K2] \v1.0.1\
 [K11] \Valor\
 [K15] \240\
 [K16] \120\
 
 Nombres:
- [COMISION_APERTURA_COMUN] =Consola!#REF!
- [COMISION_REDISPOSICION_COMUN] =Consola!#REF!
 
 Nombre del proyecto VB: [VBAProject]
 
