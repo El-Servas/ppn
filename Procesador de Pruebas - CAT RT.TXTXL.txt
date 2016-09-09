@@ -1,12 +1,12 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 09/09/2016 11:58:29 a.m.
+Fecha y hora de generación: 09/09/2016 12:13:43 p.m.
 
 Resumen
 =======
 
  * Hojas: 1
 
- * Nombres Definidos: 0
+ * Nombres Definidos: 2
 
  * Módulos de Visual Basic: 6
 
@@ -20,30 +20,37 @@ Hojas:
 
 Contenido:
 [Consola]
-[B2] \Procesador de Pruebas para CAT Revolvente Pago Tradicional (CAT_RT)\
-[B4] \Requiere los siguientes archivos en la misma carpeta:\
-[C6] \* CAT_RT.xlsm\
-[C7] \* Data.xlsx\
-[E6] \v1.1\
-[E7] \Con el formato adecuado\
-[I9] \Mapeo de Columnas en Archivo de Datos\
-[I12] \i.Monto_Línea\
-[I13] \i.Tasa_Anual\
-[I14] \i.Tasa_IVA_Interes\
-[I15] \i.Comisiones_Iniciales\
-[I16] \i.Comisión_Redisposición\
-[I17] \i.Plazo_En_Meses\
-[J11] \Columna\
-[J12] \OFERTA\
-[J13] \TASA\
-[J14] \IVA\
-[J17] \PLAZO\
-[K2] \v1.0.1\
-[K11] \Valor\
-[K15] \240\
-[K16] \120\
+[B2] \Procesador de Pruebas para CAT Revolvente Pago Tradicional\
+[B3] \v2.0\
+[B5] \Requiere los siguientes archivos en la misma carpeta:\
+[B7] \* CAT_RT.xlsm\
+[B8] \* Data.xlsx\
+[B13] \Mapeo de Columnas en Archivo de Datos\
+[B15] (MAPEO_START) \Parámetro\
+[B16] \i.Monto_Línea\
+[B17] \i.Tasa_Anual\
+[B18] \i.Tasa_IVA_Interes\
+[B19] \i.Comisiones_Iniciales\
+[B20] \i.Comisión_Redisposición\
+[B21] \i.Plazo_En_Meses\
+[C7] \v1.1\
+[C8] \Con el formato adecuado\
+[C15] \Columna\
+[C16] \OFERTA\
+[C17] \TASA\
+[C18] \IVA\
+[C21] \PLAZO\
+[D15] \Valor\
+[D19] \240\
+[D20] \120\
+[F13] \Resultados\
+[F15] (RESULTADOS_START) \Parámetro\
+[Consola]
+[F16] \o.CAT\
 
 Nombres:
+ [MAPEO_START] =Consola!$B$15
+ [RESULTADOS_START] =Consola!$F$15
 
 Nombre del proyecto VB: [VBAProject]
 
