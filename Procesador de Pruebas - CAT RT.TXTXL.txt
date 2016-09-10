@@ -1,16 +1,12 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 09/09/2016 01:39:18 p.m.
+Fecha y hora de generación: 10/09/2016 12:52:19 p.m.
 
 Resumen
 =======
-
  * Hojas: 1
-
  * Nombres Definidos: 2
-
  * Módulos de Visual Basic: 6
-
- * Líneas de código VB: 203
+ * Líneas de código VB: 224
 
 Detalle
 =======
@@ -200,7 +196,7 @@ Option Explicit
 
 \\\--- END OF MODULE ---
 
-[Utils] 39 líneas de código.
+[Utils] 60 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -241,6 +237,27 @@ Sub test()
         Debug.Print Parametro, Tipo, Valor
     Next
 End Sub
+
+Sub UseDA()
+    Dim arr() As Variant
+    InsertIntoDictArray arr, "TestKey", "TestValue"
+    InsertIntoDictArray arr, "TestKey2", "TestValue2"
+    Dim ix: For ix = 1 To UBound(arr, 2)
+        Debug.Print arr(1, ix), arr(2, ix)
+    Next
+End Sub
+
+Sub InsertIntoDictArray(arr() As Variant, Key, Value)
+    Dim NewSize: NewSize = 1
+    On Error Resume Next: NewSize = UBound(arr, 2) + 1: On Error GoTo 0
+    
+    ReDim Preserve arr(1 To 2, 1 To NewSize)
+    arr(1, NewSize) = Key
+    arr(2, NewSize) = Value
+    
+End Sub
+
+
 \\\--- END OF MODULE ---
 
 [Stopwatch] 11 líneas de código.
@@ -291,5 +308,5 @@ End Sub
 \\\--- END OF MODULE ---
 
 
-** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
-Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
+** Fin del proceso de exportación. Proceso realizado en 0.00 minutos. **
+ExportToTxt [ExportToTxt.xls] v3.0.0-SNAPSHOT (Standalone)
