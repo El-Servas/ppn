@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 01:07:35 p.m.
+Fecha y hora de generación: 13/09/2016 01:27:59 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 246
+ * Líneas de código VB: 242
 
 Detalle
 =======
@@ -46,13 +46,9 @@ Contenido:
 [F13] \Resultados\
 [F15] (RESULTADOS_START) \Parámetro\
 [Consola]
-[F16] \i.Comisiones_Iniciales\
-[F17] \i.Comisión_Redisposición\
-[F18] \o.CAT\
+[F16] \o.CAT\
 [G15] \Etiqueta\
-[G16] \Com. Apertura\
-[G17] \Com. Redisposición\
-[G18] \CAT\
+[G16] \CAT\
 
 Nombres:
  [MAPEO_START] =Consola!$B$15
@@ -307,7 +303,7 @@ Function Ellapsed() As Long
 End Function
 \\\--- END OF MODULE ---
 
-[Esqueleto] 28 líneas de código.
+[Esqueleto] 24 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -322,20 +318,16 @@ On Error GoTo err_hand
     CorrerPruebas
     
 err_hand:
-    ApagarAmbiente
+    Dim Msg: Msg = "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
+    If Calcula.Mensaje <> "" Then Msg = Msg & vbCrLf & vbCrLf & "Advertencia: " & Calcula.Mensaje
+    If Err.Number <> 0 Then Msg = Msg & vbCrLf & vbCrLf & "Error: " & Err.Number & " - " & Err.Description
     
+    ApagarAmbiente
     Application.ScreenUpdating = True
     Application.StatusBar = False
     
     AppActivate ThisWorkbook.Application.Caption
-    
-    If Err.Number = 0 Then
-        Dim Msg: Msg = "Proceso terminado en " & FriendlySeconds(Stopwatch.Ellapsed)
-        If Calcula.Mensaje <> "" Then Msg = Msg & vbCrLf & vbCrLf & Calcula.Mensaje
-        MsgBox Msg
-    Else
-        Debug.Print Err.Number & " - " & Err.Description
-    End If
+    MsgBox Msg
 End Sub
 \\\--- END OF MODULE ---
 
