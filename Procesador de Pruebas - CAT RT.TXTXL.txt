@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 12:38:11 p.m.
+Fecha y hora de generación: 13/09/2016 12:55:56 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 238
+ * Líneas de código VB: 243
 
 Detalle
 =======
@@ -46,7 +46,13 @@ Contenido:
 [F13] \Resultados\
 [F15] (RESULTADOS_START) \Parámetro\
 [Consola]
-[F16] \o.CAT\
+[F16] \i.Comisiones_Iniciales\
+[F17] \i.Comisión_Redisposición\
+[F18] \o.CAT\
+[G15] \Etiqueta\
+[G16] \Com. Apertura\
+[G17] \Com. Redisposición\
+[G18] \CAT\
 
 Nombres:
  [MAPEO_START] =Consola!$B$15
@@ -67,7 +73,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 173 líneas de código.
+[Calcula] 178 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -156,11 +162,16 @@ Sub ProcesarParametros()
         For ix = 2 To .CurrentRegion.Rows.Count
             RowOffset = ix - 1
             Parámetro = .offset(RowOffset, 0)
-            InsertIntoBiArray arResultados, Parámetro, ""
+            Contenido = .offset(RowOffset, 1)
+            InsertIntoBiArray arResultados, Parámetro, Contenido
         Next
     End With
     
     ixInicioResultados = wsData.Cells(1).CurrentRegion.Columns.Count + 1
+    
+    For ix = 1 To UBound(arResultados, 2)
+        wsData.Cells(1, ixInicioResultados + ix - 1) = arResultados(2, ix)
+    Next
 End Sub
 
 Sub CorrerPruebas()
