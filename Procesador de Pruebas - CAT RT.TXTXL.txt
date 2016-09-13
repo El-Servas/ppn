@@ -1,12 +1,16 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 10/09/2016 12:52:19 p.m.
+Fecha y hora de generación: 13/09/2016 11:35:35 a.m.
 
 Resumen
 =======
+
  * Hojas: 1
+
  * Nombres Definidos: 2
+
  * Módulos de Visual Basic: 6
- * Líneas de código VB: 224
+
+ * Líneas de código VB: 254
 
 Detalle
 =======
@@ -63,7 +67,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 123 líneas de código.
+[Calcula] 154 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -95,8 +99,11 @@ Private wsCalc As Worksheet
 Private wbData As Workbook
 Private wsData As Worksheet
 
-Dim ix As Long
-Dim nReg As Long
+Private ix As Long
+Private nReg As Long
+
+Private arParámetrosMapeados() As Variant
+Private arParámetrosValor() As Variant
 
 Private RunWhen As Double
 Private Const RUN_INTERVAL_SECONDS = 1
@@ -120,6 +127,34 @@ Sub ConfiguraAmbiente()
     nReg = wsData.Cells(1).CurrentRegion.Rows.Count
     HuboError = 0
     Mensaje = ""
+    
+    ProcesarParametros
+End Sub
+
+Sub ProcesarParametros()
+    'Creamos listas de parámetros: Valor y Mapeados
+    Erase arParámetrosMapeados
+    Erase arParámetrosValor
+    Dim Parámetro, Contenido
+    Dim ix, RowOffset
+    For ix = 2 To [Mapeo_start].CurrentRegion.Rows.Count
+        RowOffset = ix - 1
+        Parámetro = Range("Mapeo_start").offset(RowOffset, 0)
+        Contenido = Range("Mapeo_start").offset(RowOffset, 1) 'Se asume Mapeado
+        If Contenido = "" Then
+            Contenido = Range("Mapeo_start").offset(RowOffset, 2)
+            InsertIntoBiArray arParámetrosValor, Parámetro, Contenido
+        Else
+            InsertIntoBiArray arParámetrosMapeados, Parámetro, Contenido
+        End If
+    Next
+    
+    For ix = 1 To UBound(arParámetrosMapeados, 2)
+        Debug.Print arParámetrosMapeados(1, ix), arParámetrosMapeados(2, ix)
+    Next
+    For ix = 1 To UBound(arParámetrosValor, 2)
+        Debug.Print arParámetrosValor(1, ix), arParámetrosValor(2, ix)
+    Next
 End Sub
 
 Sub CorrerPruebas()
@@ -196,7 +231,7 @@ Option Explicit
 
 \\\--- END OF MODULE ---
 
-[Utils] 60 líneas de código.
+[Utils] 59 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -212,6 +247,15 @@ Function PadCeros(s)
     PadCeros = Right(String(2, "0") & s, 2)
 End Function
 
+'Incrementa el tamaño de un arreglo bidimensional y agrega Key y Value
+Sub InsertIntoBiArray(arr() As Variant, Key, Value)
+    Dim NewSize: NewSize = 1
+    On Error Resume Next: NewSize = UBound(arr, 2) + 1: On Error GoTo 0
+    
+    ReDim Preserve arr(1 To 2, 1 To NewSize)
+    arr(1, NewSize) = Key
+    arr(2, NewSize) = Value
+End Sub
 
 '==============================================================================
 
@@ -220,19 +264,19 @@ Sub test()
     Dim Rg As Range, cl As Range
     Set Rg = Range("MAPEO_START").CurrentRegion
     Set Rg = Rg.Resize(Rg.Rows.Count - 1)
-    Set Rg = Rg.Offset(1)
+    Set Rg = Rg.offset(1)
     Set Rg = Rg.Columns(1)
     'Rg.Select
 
     For Each cl In Rg.Cells
         Dim Parametro As String: Parametro = cl.Value
         Dim Tipo, Valor
-        If cl.Offset(0, 1) <> "" Then
+        If cl.offset(0, 1) <> "" Then
             Tipo = "Mapeado"
-            Valor = cl.Offset(0, 1)
+            Valor = cl.offset(0, 1)
         Else
             Tipo = "Valor"
-            Valor = cl.Offset(0, 2)
+            Valor = cl.offset(0, 2)
         End If
         Debug.Print Parametro, Tipo, Valor
     Next
@@ -240,21 +284,11 @@ End Sub
 
 Sub UseDA()
     Dim arr() As Variant
-    InsertIntoDictArray arr, "TestKey", "TestValue"
-    InsertIntoDictArray arr, "TestKey2", "TestValue2"
+    InsertIntoBiArray arr, "TestKey", "TestValue"
+    InsertIntoBiArray arr, "TestKey2", "TestValue2"
     Dim ix: For ix = 1 To UBound(arr, 2)
         Debug.Print arr(1, ix), arr(2, ix)
     Next
-End Sub
-
-Sub InsertIntoDictArray(arr() As Variant, Key, Value)
-    Dim NewSize: NewSize = 1
-    On Error Resume Next: NewSize = UBound(arr, 2) + 1: On Error GoTo 0
-    
-    ReDim Preserve arr(1 To 2, 1 To NewSize)
-    arr(1, NewSize) = Key
-    arr(2, NewSize) = Value
-    
 End Sub
 
 
@@ -308,5 +342,5 @@ End Sub
 \\\--- END OF MODULE ---
 
 
-** Fin del proceso de exportación. Proceso realizado en 0.00 minutos. **
-ExportToTxt [ExportToTxt.xls] v3.0.0-SNAPSHOT (Standalone)
+** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
+Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
