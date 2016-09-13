@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 12:05:14 p.m.
+Fecha y hora de generación: 13/09/2016 12:13:58 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 277
+ * Líneas de código VB: 254
 
 Detalle
 =======
@@ -67,23 +67,12 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 177 líneas de código.
+[Calcula] 154 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
-'Private Const COL_COMISIÓN = 2
-Private Const COL_MONTO = 3
-Private Const COL_TASA = 4
-Private Const COL_PLAZO = 5
-Private Const COL_IVA = 6
 Private Const COL_CAT = 8
 
-Private Const PARAM_MONTO = "i.Monto_Línea"
-Private Const PARAM_TASA = "i.Tasa_Anual"
-Private Const PARAM_IVA = "i.Tasa_IVA_Interes"
-'Private Const PARAM_COMISIÓN = "i.Comisiones_Iniciales"
-Private Const PARAM_COM_REDISP = "i.Comisión_Redisposición"
-Private Const PARAM_PLAZO = "i.Plazo_En_Meses"
 Private Const PARAM_CAT = "o.CAT"
 
 Private Const ERROR_CONSTANT = "NA*"
@@ -149,23 +138,11 @@ Sub ProcesarParametros()
         End If
     Next
     
-    For ix = 1 To UBound(arParámetrosValor, 2)
-        Debug.Print arParámetrosValor(1, ix), arParámetrosValor(2, ix)
-    Next
-    
-    For ix = 1 To UBound(arParámetrosMapeados, 2)
-        Debug.Print arParámetrosMapeados(1, ix), arParámetrosMapeados(2, ix)
-    Next
-    
     'Convierte el nombre de columa de los Mapeados a los Índices de columna en el archivo de datos.
     For ix = 1 To UBound(arParámetrosMapeados, 2)
         Contenido = arParámetrosMapeados(2, ix)
         Dim Columna: Columna = wsData.Cells.Rows(1).Find(Contenido).Column
         arParámetrosMapeados(2, ix) = Columna
-    Next
-    
-    For ix = 1 To UBound(arParámetrosMapeados, 2)
-        Debug.Print arParámetrosMapeados(1, ix), arParámetrosMapeados(2, ix)
     Next
 End Sub
 
@@ -187,7 +164,7 @@ Sub CorrerPruebas()
             For jx = 1 To UBound(arParámetrosMapeados, 2)
                 Parámetro = arParámetrosMapeados(1, jx)
                 Contenido = arParámetrosMapeados(2, jx)
-                wsCalc.Range(Parámetro) = Contenido
+                wsCalc.Range(Parámetro) = wsData.Cells(ix, Contenido).Value
             Next
             
             'Plasma Resultado
