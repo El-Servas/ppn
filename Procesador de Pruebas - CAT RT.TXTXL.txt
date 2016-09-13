@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 12:32:10 p.m.
+Fecha y hora de generación: 13/09/2016 12:38:11 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 271
+ * Líneas de código VB: 238
 
 Detalle
 =======
@@ -67,7 +67,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 171 líneas de código.
+[Calcula] 173 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -184,8 +184,10 @@ Sub CorrerPruebas()
                 wsCalc.Range(Parámetro) = wsData.Cells(ix, Contenido).Value
             Next
             
-            'Plasma Resultado
-            wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+            'Plasma Resultados
+            For jx = 1 To UBound(arResultados, 2)
+                wsData.Cells(ix, ixInicioResultados + jx - 1) = wsCalc.Range(arResultados(1, jx))
+            Next
             
             If IsError(wsData.Cells(ix, COL_CAT)) Then
                 HuboError = HuboError + 1
@@ -248,7 +250,7 @@ Option Explicit
 
 \\\--- END OF MODULE ---
 
-[Utils] 59 líneas de código.
+[Utils] 24 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -273,41 +275,6 @@ Sub InsertIntoBiArray(arr() As Variant, Key, Value)
     arr(1, NewSize) = Key
     arr(2, NewSize) = Value
 End Sub
-
-'==============================================================================
-
-Sub test()
-    'Tabla de parámetros
-    Dim Rg As Range, cl As Range
-    Set Rg = Range("MAPEO_START").CurrentRegion
-    Set Rg = Rg.Resize(Rg.Rows.Count - 1)
-    Set Rg = Rg.offset(1)
-    Set Rg = Rg.Columns(1)
-    'Rg.Select
-
-    For Each cl In Rg.Cells
-        Dim Parametro As String: Parametro = cl.Value
-        Dim Tipo, Valor
-        If cl.offset(0, 1) <> "" Then
-            Tipo = "Mapeado"
-            Valor = cl.offset(0, 1)
-        Else
-            Tipo = "Valor"
-            Valor = cl.offset(0, 2)
-        End If
-        Debug.Print Parametro, Tipo, Valor
-    Next
-End Sub
-
-Sub UseDA()
-    Dim arr() As Variant
-    InsertIntoBiArray arr, "TestKey", "TestValue"
-    InsertIntoBiArray arr, "TestKey2", "TestValue2"
-    Dim ix: For ix = 1 To UBound(arr, 2)
-        Debug.Print arr(1, ix), arr(2, ix)
-    Next
-End Sub
-
 
 \\\--- END OF MODULE ---
 
@@ -359,5 +326,5 @@ End Sub
 \\\--- END OF MODULE ---
 
 
-** Fin del proceso de exportación. Proceso realizado en 01 sec.  **
+** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
 Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
