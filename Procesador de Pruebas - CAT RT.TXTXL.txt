@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 11:51:22 a.m.
+Fecha y hora de generación: 13/09/2016 12:05:14 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 265
+ * Líneas de código VB: 277
 
 Detalle
 =======
@@ -67,7 +67,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 165 líneas de código.
+[Calcula] 177 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -149,11 +149,23 @@ Sub ProcesarParametros()
         End If
     Next
     
+    For ix = 1 To UBound(arParámetrosValor, 2)
+        Debug.Print arParámetrosValor(1, ix), arParámetrosValor(2, ix)
+    Next
+    
     For ix = 1 To UBound(arParámetrosMapeados, 2)
         Debug.Print arParámetrosMapeados(1, ix), arParámetrosMapeados(2, ix)
     Next
-    For ix = 1 To UBound(arParámetrosValor, 2)
-        Debug.Print arParámetrosValor(1, ix), arParámetrosValor(2, ix)
+    
+    'Convierte el nombre de columa de los Mapeados a los Índices de columna en el archivo de datos.
+    For ix = 1 To UBound(arParámetrosMapeados, 2)
+        Contenido = arParámetrosMapeados(2, ix)
+        Dim Columna: Columna = wsData.Cells.Rows(1).Find(Contenido).Column
+        arParámetrosMapeados(2, ix) = Columna
+    Next
+    
+    For ix = 1 To UBound(arParámetrosMapeados, 2)
+        Debug.Print arParámetrosMapeados(1, ix), arParámetrosMapeados(2, ix)
     Next
 End Sub
 
