@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 12:55:56 p.m.
+Fecha y hora de generación: 13/09/2016 01:07:35 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 243
+ * Líneas de código VB: 246
 
 Detalle
 =======
@@ -73,7 +73,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 178 líneas de código.
+[Calcula] 181 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -210,6 +210,9 @@ Sub CorrerPruebas()
         End If
         DoEvents
     Next
+    
+    wsData.Cells(1).CurrentRegion.Columns.AutoFit
+    
     If HuboError Then Mensaje = "PRECAUCIÓN: Hubo (" & HuboError & ") registros con error."
 End Sub
 
