@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 12:13:58 p.m.
+Fecha y hora de generación: 13/09/2016 12:32:10 p.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 254
+ * Líneas de código VB: 271
 
 Detalle
 =======
@@ -67,7 +67,7 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 154 líneas de código.
+[Calcula] 171 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
@@ -93,6 +93,9 @@ Private nReg As Long
 
 Private arParámetrosMapeados() As Variant
 Private arParámetrosValor() As Variant
+
+Private arResultados() As Variant
+Private ixInicioResultados 'Índice de inicio para los resultados
 
 Private RunWhen As Double
 Private Const RUN_INTERVAL_SECONDS = 1
@@ -124,8 +127,11 @@ Sub ProcesarParametros()
     'Creamos listas de parámetros: Valor y Mapeados
     Erase arParámetrosMapeados
     Erase arParámetrosValor
+    Erase arResultados
+    
     Dim Parámetro, Contenido
     Dim ix, RowOffset
+    
     For ix = 2 To [Mapeo_start].CurrentRegion.Rows.Count
         RowOffset = ix - 1
         Parámetro = Range("Mapeo_start").offset(RowOffset, 0)
@@ -144,6 +150,17 @@ Sub ProcesarParametros()
         Dim Columna: Columna = wsData.Cells.Rows(1).Find(Contenido).Column
         arParámetrosMapeados(2, ix) = Columna
     Next
+    
+    'Ahora los Resultados
+    With Range("Resultados_start")
+        For ix = 2 To .CurrentRegion.Rows.Count
+            RowOffset = ix - 1
+            Parámetro = .offset(RowOffset, 0)
+            InsertIntoBiArray arResultados, Parámetro, ""
+        Next
+    End With
+    
+    ixInicioResultados = wsData.Cells(1).CurrentRegion.Columns.Count + 1
 End Sub
 
 Sub CorrerPruebas()
@@ -342,5 +359,5 @@ End Sub
 \\\--- END OF MODULE ---
 
 
-** Fin del proceso de exportación. Proceso realizado en 00 sec.  **
+** Fin del proceso de exportación. Proceso realizado en 01 sec.  **
 Lib_ExportToTxt [ExportToTxt.xls] v2.13.1
