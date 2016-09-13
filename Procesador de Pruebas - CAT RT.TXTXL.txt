@@ -1,5 +1,5 @@
 Representación Textual del archivo de Excel: "Procesador de Pruebas - CAT RT.xlsm"
-Fecha y hora de generación: 13/09/2016 11:35:35 a.m.
+Fecha y hora de generación: 13/09/2016 11:51:22 a.m.
 
 Resumen
 =======
@@ -10,7 +10,7 @@ Resumen
 
  * Módulos de Visual Basic: 6
 
- * Líneas de código VB: 254
+ * Líneas de código VB: 265
 
 Detalle
 =======
@@ -67,11 +67,11 @@ Codigo:
 ///--- BEGINNING OF MODULE ---
 \\\--- END OF MODULE ---
 
-[Calcula] 154 líneas de código.
+[Calcula] 165 líneas de código.
 ///--- BEGINNING OF MODULE ---
 Option Explicit
 
-Private Const COL_COMISIÓN = 2
+'Private Const COL_COMISIÓN = 2
 Private Const COL_MONTO = 3
 Private Const COL_TASA = 4
 Private Const COL_PLAZO = 5
@@ -81,7 +81,7 @@ Private Const COL_CAT = 8
 Private Const PARAM_MONTO = "i.Monto_Línea"
 Private Const PARAM_TASA = "i.Tasa_Anual"
 Private Const PARAM_IVA = "i.Tasa_IVA_Interes"
-Private Const PARAM_COMISIÓN = "i.Comisiones_Iniciales"
+'Private Const PARAM_COMISIÓN = "i.Comisiones_Iniciales"
 Private Const PARAM_COM_REDISP = "i.Comisión_Redisposición"
 Private Const PARAM_PLAZO = "i.Plazo_En_Meses"
 Private Const PARAM_CAT = "o.CAT"
@@ -162,15 +162,26 @@ Sub CorrerPruebas()
     For ix = 2 To nReg
         
         If wsData.Cells(ix, COL_CAT) = "" Then
-            wsCalc.Range(PARAM_COMISIÓN) = wsData.Cells(ix, COL_COMISIÓN).Value
-            wsCalc.Range(PARAM_MONTO) = wsData.Cells(ix, COL_MONTO).Value
-            wsCalc.Range(PARAM_TASA) = wsData.Cells(ix, COL_TASA) / 100
-            wsCalc.Range(PARAM_PLAZO) = wsData.Cells(ix, COL_PLAZO)
-            wsCalc.Range(PARAM_IVA) = wsData.Cells(ix, COL_IVA)
+            Dim jx, Parámetro, Contenido
             
-            If Not IsError(wsCalc.Range(PARAM_CAT)) Then
-                wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
-            Else
+            'Iteramos Parámetros Valor
+            For jx = 1 To UBound(arParámetrosValor, 2)
+                Parámetro = arParámetrosValor(1, jx)
+                Contenido = arParámetrosValor(2, jx)
+                wsCalc.Range(Parámetro) = Contenido
+            Next
+            
+            'Iteramos Parámetros Mapeados
+            For jx = 1 To UBound(arParámetrosMapeados, 2)
+                Parámetro = arParámetrosMapeados(1, jx)
+                Contenido = arParámetrosMapeados(2, jx)
+                wsCalc.Range(Parámetro) = Contenido
+            Next
+            
+            'Plasma Resultado
+            wsData.Cells(ix, COL_CAT) = wsCalc.Range(PARAM_CAT)
+            
+            If IsError(wsData.Cells(ix, COL_CAT)) Then
                 HuboError = HuboError + 1
                 With wsData.Cells(ix, COL_CAT)
                     .Value = ERROR_CONSTANT
