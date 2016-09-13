@@ -2,9 +2,9 @@ Lista de Parámetros Valor
 Lista de Parámetros Mapeados
 Lista de Resultados
 
-Los Parámetros Valor se usan directamente cuando se necesiten.
+''''
 
-Diccionario de Parámetro,Valor
+Los Parámetros Valor se usan directamente cuando se necesiten.
 
 ''''
 
@@ -15,9 +15,10 @@ Para Resolverlos, se debe de saber el Número de Columna que les corresponde.
 Para saber el Número de Columna hay que buscar su nombre de columna en los encabezados del archivo de datos.
 Se aprovecha este proceso para determinar el índice de inicio de resultados, y escribir las etiquetas.
 
-Diccionario de Parámetro, índice
 
 ''''
+
+En cada fila, se deben de resolver los parámetros mapeados
 
 Se recorren las dos listas de Parámetros, pegando el valor (directo o resuelto) en el rango correspondiente (Parámetro)
 
